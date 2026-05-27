@@ -42,6 +42,28 @@ export default function MapComponent({ activeLayers }: MapComponentProps) {
           }}
         />
       </Source>
+      <Source id="air-quality-source" type="geojson" data="/api/air">
+        <Layer
+          id="air-quality-layer"
+          type="circle"
+          paint={{
+            "circle-radius": 8,
+            "circle-color": [
+              "case",
+              ["<", ["get", "pm25"], 12],
+              "#38BDF8",
+              ["<", ["get", "pm25"], 35],
+              "#FBBF24",
+              "#EF4444",
+            ],
+            "circle-stroke-color": "#FFFFFF",
+            "circle-stroke-width": 2,
+          }}
+          layout={{
+            visibility: activeLayers.airQuality ? "visible" : "none",
+          }}
+        />
+      </Source>
     </Map>
   );
 }
