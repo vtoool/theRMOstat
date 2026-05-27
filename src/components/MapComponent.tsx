@@ -45,19 +45,32 @@ export default function MapComponent({ activeLayers }: MapComponentProps) {
       <Source id="air-quality-source" type="geojson" data="/api/air">
         <Layer
           id="air-quality-layer"
-          type="circle"
+          type="heatmap"
           paint={{
-            "circle-radius": 8,
-            "circle-color": [
-              "case",
-              ["<", ["get", "pm25"], 12],
-              "#38BDF8",
-              ["<", ["get", "pm25"], 35],
-              "#FBBF24",
-              "#EF4444",
+            "heatmap-weight": ["get", "pm25"],
+            "heatmap-intensity": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              0, 1,
+              15, 3,
             ],
-            "circle-stroke-color": "#FFFFFF",
-            "circle-stroke-width": 2,
+            "heatmap-color": [
+              "interpolate",
+              ["linear"],
+              ["heatmap-density"],
+              0, "rgba(56, 189, 248, 0)",
+              0.2, "rgba(56, 189, 248, 0.3)",
+              0.6, "rgba(251, 191, 36, 0.4)",
+              1, "rgba(239, 68, 68, 0.5)",
+            ],
+            "heatmap-radius": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              0, 15,
+              15, 40,
+            ],
           }}
           layout={{
             visibility: activeLayers.airQuality ? "visible" : "none",
