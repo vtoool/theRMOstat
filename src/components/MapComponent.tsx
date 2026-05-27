@@ -48,28 +48,17 @@ export default function MapComponent({ activeLayers }: MapComponentProps) {
           type="heatmap"
           paint={{
             "heatmap-weight": ["get", "pm25"],
-            "heatmap-intensity": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              0, 1,
-              15, 3,
-            ],
+            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 0, 1, 15, 3],
+            "heatmap-radius": ["interpolate", ["linear"], ["zoom"], 10, 80, 15, 250],
+            "heatmap-opacity": 0.5,
             "heatmap-color": [
               "interpolate",
               ["linear"],
               ["heatmap-density"],
               0, "rgba(56, 189, 248, 0)",
-              0.2, "rgba(56, 189, 248, 0.3)",
-              0.6, "rgba(251, 191, 36, 0.4)",
-              1, "rgba(239, 68, 68, 0.5)",
-            ],
-            "heatmap-radius": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              0, 15,
-              15, 40,
+              0.2, "rgba(56, 189, 248, 0.4)",
+              0.6, "rgba(251, 191, 36, 0.5)",
+              1.0, "rgba(239, 68, 68, 0.6)",
             ],
           }}
           layout={{
