@@ -20,8 +20,13 @@ interface LayerToggleProps {
 function LayerToggle({ label, active, onChange }: LayerToggleProps) {
   return (
     <label className="flex items-center gap-3 cursor-pointer group">
+      <input
+        type="checkbox"
+        checked={active}
+        onChange={(e) => onChange(e.target.checked)}
+        className="sr-only"
+      />
       <div
-        onClick={() => onChange(!active)}
         className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${
           active ? "bg-thermo-green" : "bg-gray-300"
         }`}

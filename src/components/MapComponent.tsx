@@ -1,7 +1,6 @@
 "use client";
 
 import { Map, Source, Layer, NavigationControl } from "react-map-gl/mapbox";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 interface ActiveLayers {
   canopy: boolean;
