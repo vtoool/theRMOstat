@@ -63,7 +63,7 @@ export default function MapDashboard() {
         initial={{ x: 300, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="absolute top-4 right-4 z-10 w-72 bg-white/90 backdrop-blur-md border border-[#E5E7EB] rounded-xl shadow-panel p-4"
+        className="absolute top-4 right-4 z-50 w-72 bg-white/90 backdrop-blur-md border border-[#E5E7EB] rounded-xl shadow-panel p-4"
       >
         <h2 className="text-lg font-semibold text-thermo-dark mb-4">Layers</h2>
         <div className="flex flex-col gap-4">
