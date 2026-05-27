@@ -1,16 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 
-const MapComponent = dynamic(() => import("./MapComponent"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center w-full h-full bg-thermo-surface">
-      <p className="text-thermo-dark">Loading map...</p>
-    </div>
-  ),
-});
+interface ActiveLayers {
+  canopy: boolean;
+  heat: boolean;
+  airQuality: boolean;
+  incidents: boolean;
+}
 
 interface LayerToggleProps {
   label: string;
@@ -40,19 +39,26 @@ function LayerToggle({ label, active, onChange }: LayerToggleProps) {
   );
 }
 
-interface MapDashboardProps {
-  activeLayers?: {
-    canopy?: boolean;
-    heatIsland?: boolean;
-    airQuality?: boolean;
-    floodAlerts?: boolean;
-  };
-}
+const MapComponent = dynamic(() => import("./MapComponent"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center w-full h-full bg-thermo-surface">
+      <p className="text-thermo-dark">Loading map...</p>
+    </div>
+  ),
+});
 
-export default function MapDashboard({ activeLayers }: MapDashboardProps) {
+export default function MapDashboard() {
+  const [activeLayers, setActiveLayers] = useState<ActiveLayers>({
+    canopy: true,
+    heat: false,
+    airQuality: false,
+    incidents: false,
+  });
+
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      <MapComponent />
+      <MapComponent activeLayers={activeLayers} />
       <motion.aside
         initial={{ x: 300, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -61,10 +67,26 @@ export default function MapDashboard({ activeLayers }: MapDashboardProps) {
       >
         <h2 className="text-lg font-semibold text-thermo-dark mb-4">Layers</h2>
         <div className="flex flex-col gap-4">
-          <LayerToggle label="Tree Canopy" active={activeLayers?.canopy ?? true} onChange={() => {}} />
-          <LayerToggle label="Urban Heat Island" active={activeLayers?.heatIsland ?? false} onChange={() => {}} />
-          <LayerToggle label="Live Air Quality" active={activeLayers?.airQuality ?? false} onChange={() => {}} />
-          <LayerToggle label="Flood/Incident Alerts" active={activeLayers?.floodAlerts ?? false} onChange={() => {}} />
+          <LayerToggle
+            label="Tree Canopy"
+            active={activeLayers.canopy}
+            onChange={() => setActiveLayers((prev) => ({ ...prev, canopy: !prev.canopy }))}
+          />
+          <LayerToggle
+            label="Urban Heat Island"
+            active={activeLayers.heat}
+            onChange={() => setActiveLayers((prev) => ({ ...prev, heat: !prev.heat }))}
+          />
+          <LayerToggle
+            label="Live Air Quality"
+            active={activeLayers.airQuality}
+            onChange={() => setActiveLayers((prev) => ({ ...prev, airQuality: !prev.airQuality }))}
+          />
+          <LayerToggle
+            label="Flood/Incident Alerts"
+            active={activeLayers.incidents}
+            onChange={() => setActiveLayers((prev) => ({ ...prev, incidents: !prev.incidents }))}
+          />
         </div>
       </motion.aside>
     </div>

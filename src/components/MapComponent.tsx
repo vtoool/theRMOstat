@@ -3,18 +3,20 @@
 import { Map, Source, Layer, NavigationControl } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+interface ActiveLayers {
+  canopy: boolean;
+  heat: boolean;
+  airQuality: boolean;
+  incidents: boolean;
+}
+
+interface MapComponentProps {
+  activeLayers: ActiveLayers;
+}
+
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
-const canopyLayerStyle = {
-  id: "canopy-fill",
-  type: "fill" as const,
-  paint: {
-    "fill-color": "#10B981",
-    "fill-opacity": 0.4,
-  },
-};
-
-export default function MapComponent() {
+export default function MapComponent({ activeLayers }: MapComponentProps) {
   return (
     <Map
       initialViewState={{
@@ -28,12 +30,18 @@ export default function MapComponent() {
       attributionControl={false}
     >
       <NavigationControl position="bottom-right" />
-      <Source
-        id="canopy-source"
-        type="geojson"
-        data="/data/canopy.geojson"
-      >
-        <Layer {...canopyLayerStyle} />
+      <Source id="canopy-source" type="geojson" data="/data/canopy.geojson">
+        <Layer
+          id="canopy-layer"
+          type="fill"
+          paint={{
+            "fill-color": "#10B981",
+            "fill-opacity": 0.4,
+          }}
+          layout={{
+            visibility: activeLayers.canopy ? "visible" : "none",
+          }}
+        />
       </Source>
     </Map>
   );
